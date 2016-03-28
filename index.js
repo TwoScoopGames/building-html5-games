@@ -167,6 +167,7 @@ var render = function(time) {
         playSound(explode);
         bullets.splice(i, 1);
         meteors.splice(j, 1);
+        i--;
         j--;
       }
     }
