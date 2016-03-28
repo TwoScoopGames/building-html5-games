@@ -68,6 +68,20 @@ function drawAnimation(context, name, x, y) {
   context.drawImage(anim.image, anim.x, 0, anim.frameWidth, anim.image.height, x, y, anim.frameWidth, anim.image.height);
 }
 
+// Sounds
+var explode = new Audio();
+explode.src = "sounds/explode.wav";
+explode.load();
+
+var laser = new Audio();
+laser.src = "sounds/laser.wav";
+laser.load();
+
+function playSound(sound) {
+  var s = sound.cloneNode(true);
+  s.play();
+}
+
 // Entities
 var player = {
   x: (canvas.width / 2) - (animations.ship.frameWidth / 2),
@@ -121,6 +135,8 @@ var render = function(time) {
   if (pressed["space"] && fireTimer > fireTimerMax) {
     fireTimer = 0;
 
+    playSound(laser);
+
     bullets.push({
       x: player.x + (animations.ship.frameWidth / 2) - (animations.bullet.frameWidth / 2),
       y: player.y - animations.bullet.image.height
@@ -143,6 +159,7 @@ var render = function(time) {
       var meteor = meteors[j];
       if (overlaps(bullet.x, bullet.y, animations.bullet.frameWidth, animations.bullet.image.height, meteor.x, meteor.y, animations.meteor.frameWidth, animations.meteor.image.height)) {
         score++;
+        playSound(explode);
         bullets.splice(i, 1);
         meteors.splice(j, 1);
         j--;
