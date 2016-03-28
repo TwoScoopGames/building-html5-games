@@ -79,6 +79,8 @@ var bullets = [];
 var meteors = [];
 
 var lastFrameTime = null;
+var fireTimerMax = 100;
+var fireTimer = fireTimerMax;
 
 function overlaps(x1, y1, w1, h1, x2, y2, w2, h2) {
   return x1 + w1 > x2 && x1 < x2 + w2 &&
@@ -93,6 +95,7 @@ var render = function(time) {
   lastFrameTime = time;
 
   advanceAnimations(elapsed);
+  fireTimer += elapsed;
 
   while (meteors.length < 1) {
     meteors.push({
@@ -113,7 +116,9 @@ var render = function(time) {
   if (pressed["down"]) {
     player.y += player.speed * elapsed;
   }
-  if (pressed["space"]) {
+  if (pressed["space"] && fireTimer > fireTimerMax) {
+    fireTimer = 0;
+
     bullets.push({
       x: player.x + (animations.ship.frameWidth / 2) - (animations.bullet.frameWidth / 2),
       y: player.y - animations.bullet.image.height
