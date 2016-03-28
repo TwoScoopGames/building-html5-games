@@ -76,7 +76,7 @@ var player = {
 };
 
 var bullets = [];
-var meteors = [{ x: 50, y: 50 }];
+var meteors = [];
 
 var lastFrameTime = null;
 
