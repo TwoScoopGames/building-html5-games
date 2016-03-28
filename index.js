@@ -81,6 +81,7 @@ var meteors = [];
 var lastFrameTime = null;
 var fireTimerMax = 100;
 var fireTimer = fireTimerMax;
+var score = 0;
 
 function overlaps(x1, y1, w1, h1, x2, y2, w2, h2) {
   return x1 + w1 > x2 && x1 < x2 + w2 &&
@@ -141,6 +142,7 @@ var render = function(time) {
     for (var j = 0; j < meteors.length; j++) {
       var meteor = meteors[j];
       if (overlaps(bullet.x, bullet.y, animations.bullet.frameWidth, animations.bullet.image.height, meteor.x, meteor.y, animations.meteor.frameWidth, animations.meteor.image.height)) {
+        score++;
         bullets.splice(i, 1);
         meteors.splice(j, 1);
         j--;
@@ -156,6 +158,10 @@ var render = function(time) {
       i--;
     }
   }
+
+  context.fillStyle = "#fff";
+  context.font = "25px helvetica";
+  context.fillText("SCORE: " + score, 50, 50);
 
   window.requestAnimationFrame(render);
 }
