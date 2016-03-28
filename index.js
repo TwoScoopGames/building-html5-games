@@ -133,7 +133,7 @@ var render = function(time) {
     var bullet = bullets[i];
     drawAnimation(context, "bullet", bullet.x, bullet.y);
     bullet.y -= 1 * elapsed;
-    if (bullet.y < -animations.bullet.height) {
+    if (bullet.y < -animations.bullet.image.height) {
       bullets.splice(i, 1);
       i--;
       continue;
