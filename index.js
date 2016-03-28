@@ -142,6 +142,7 @@ var render = function(time) {
       if (overlaps(bullet.x, bullet.y, animations.bullet.frameWidth, animations.bullet.image.height, meteor.x, meteor.y, animations.meteor.frameWidth, animations.meteor.image.height)) {
         bullets.splice(i, 1);
         meteors.splice(j, 1);
+        i--;
         j--;
       }
     }
