@@ -17,9 +17,37 @@ window.addEventListener("keyup", function(e) {
   pressed[keys[e.keyCode]] = false;
 });
 
-// Images
-var ship = new Image();
-ship.src = "images/ship-f3.png";
+// Animations
+var animations = {
+  ship: {
+    image: new Image(),
+    frame: 0,
+    frames: 3,
+    frameWidth: 204 / 3,
+    time: 0,
+    speed: 200
+  }
+};
+animations.ship.image.src = "images/ship-f3.png";
+
+function advanceAnimations(elapsed) {
+  Object.keys(animations).forEach(function(name) {
+    var anim = animations[name];
+    anim.time += elapsed;
+    while (anim.time > anim.speed) {
+      anim.time -= anim.speed;
+      anim.frame++;
+      if (anim.frame >= anim.frames) {
+        anim.frame = 0;
+      }
+    }
+    anim.x = anim.frame * anim.frameWidth;
+  });
+}
+function drawAnimation(context, name, x, y) {
+  var anim = animations[name];
+  context.drawImage(anim.image, anim.x, 0, anim.frameWidth, anim.image.height, x, y, anim.frameWidth, anim.image.height);
+}
 
 // Entities
 var player = {
@@ -37,6 +65,8 @@ var render = function(time) {
   var elapsed = time - lastFrameTime;
   lastFrameTime = time;
 
+  advanceAnimations(elapsed);
+
   if (pressed["left"]) {
     player.x -= player.speed * elapsed;
   }
@@ -51,7 +81,7 @@ var render = function(time) {
   }
 
   context.clearRect(0, 0, canvas.width, canvas.height);
-  context.drawImage(ship, 0, 0, ship.width, ship.height, player.x, player.y, ship.width, ship.height);
+  drawAnimation(context, "ship", player.x, player.y);
 
   window.requestAnimationFrame(render);
 }
