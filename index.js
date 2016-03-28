@@ -96,6 +96,7 @@ var lastFrameTime = null;
 var fireTimerMax = 100;
 var fireTimer = fireTimerMax;
 var score = 0;
+var gameOver = false;
 
 function overlaps(x1, y1, w1, h1, x2, y2, w2, h2) {
   return x1 + w1 > x2 && x1 < x2 + w2 &&
@@ -120,31 +121,35 @@ var render = function(time) {
     });
   }
 
-  if (pressed["left"]) {
-    player.x -= player.speed * elapsed;
-  }
-  if (pressed["right"]) {
-    player.x += player.speed * elapsed;
-  }
-  if (pressed["up"]) {
-    player.y -= player.speed * elapsed;
-  }
-  if (pressed["down"]) {
-    player.y += player.speed * elapsed;
-  }
-  if (pressed["space"] && fireTimer > fireTimerMax) {
-    fireTimer = 0;
+  if (!gameOver) {
+    if (pressed["left"]) {
+      player.x -= player.speed * elapsed;
+    }
+    if (pressed["right"]) {
+      player.x += player.speed * elapsed;
+    }
+    if (pressed["up"]) {
+      player.y -= player.speed * elapsed;
+    }
+    if (pressed["down"]) {
+      player.y += player.speed * elapsed;
+    }
+    if (pressed["space"] && fireTimer > fireTimerMax) {
+      fireTimer = 0;
 
-    playSound(laser);
+      playSound(laser);
 
-    bullets.push({
-      x: player.x + (animations.ship.frameWidth / 2) - (animations.bullet.frameWidth / 2),
-      y: player.y - animations.bullet.image.height
-    });
+      bullets.push({
+        x: player.x + (animations.ship.frameWidth / 2) - (animations.bullet.frameWidth / 2),
+        y: player.y - animations.bullet.image.height
+      });
+    }
   }
 
   context.clearRect(0, 0, canvas.width, canvas.height);
-  drawAnimation(context, "ship", player.x, player.y);
+  if (!gameOver) {
+    drawAnimation(context, "ship", player.x, player.y);
+  }
 
   for (var i = 0; i < bullets.length; i++) {
     var bullet = bullets[i];
@@ -174,11 +179,20 @@ var render = function(time) {
       meteors.splice(i, 1);
       i--;
     }
+    if (!gameOver && overlaps(player.x, player.y, animations.ship.frameWidth, animations.ship.image.height, meteor.x, meteor.y, animations.meteor.frameWidth, animations.meteor.image.height)) {
+      gameOver = true;
+      playSound(explode);
+    }
   }
 
   context.fillStyle = "#fff";
   context.font = "25px helvetica";
   context.fillText("SCORE: " + score, 50, 50);
+
+  if (gameOver) {
+    context.fillStyle = "#fff";
+    context.fillText("GAME OVER", 300, 300);
+  }
 
   window.requestAnimationFrame(render);
 }
