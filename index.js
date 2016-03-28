@@ -1,9 +1,7 @@
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
 
-var colors = [ "#ff0000", "#00ff00", "#0000ff" ];
-var color = 0;
-
+// Keyboard Input
 var keys = {
   37: "left",
   38: "up",
@@ -19,6 +17,11 @@ window.addEventListener("keyup", function(e) {
   pressed[keys[e.keyCode]] = false;
 });
 
+// Images
+var ship = new Image();
+ship.src = "images/ship-f3.png";
+
+// Entities
 var player = {
   x: 50,
   y: 50,
@@ -47,13 +50,8 @@ var render = function(time) {
     player.y += player.speed * elapsed;
   }
 
-  context.fillStyle = colors[color];
-  color++;
-  if (color >= colors.length) {
-    color = 0;
-  }
   context.clearRect(0, 0, canvas.width, canvas.height);
-  context.fillRect(player.x, player.y, 50, 50);
+  context.drawImage(ship, 0, 0, ship.width, ship.height, player.x, player.y, ship.width, ship.height);
 
   window.requestAnimationFrame(render);
 }
