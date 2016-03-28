@@ -145,6 +145,7 @@ var render = function(time) {
         score++;
         bullets.splice(i, 1);
         meteors.splice(j, 1);
+        i--;
         j--;
       }
     }
