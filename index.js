@@ -22,20 +22,29 @@ window.addEventListener("keyup", function(e) {
 var player = {
   x: 50,
   y: 50,
-  speed: 5
+  speed: .7
 };
-var render = function(elapsed) {
+
+var lastFrameTime = null;
+
+var render = function(time) {
+  if (lastFrameTime === null) {
+    lastFrameTime = time;
+  }
+  var elapsed = time - lastFrameTime;
+  lastFrameTime = time;
+
   if (pressed["left"]) {
-    player.x -= player.speed;
+    player.x -= player.speed * elapsed;
   }
   if (pressed["right"]) {
-    player.x += player.speed;
+    player.x += player.speed * elapsed;
   }
   if (pressed["up"]) {
-    player.y -= player.speed;
+    player.y -= player.speed * elapsed;
   }
   if (pressed["down"]) {
-    player.y += player.speed;
+    player.y += player.speed * elapsed;
   }
 
   context.fillStyle = colors[color];
