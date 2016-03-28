@@ -97,10 +97,11 @@ var render = function(time) {
   advanceAnimations(elapsed);
   fireTimer += elapsed;
 
-  while (meteors.length < 1) {
+  while (meteors.length < 3) {
     meteors.push({
       x: Math.floor(Math.random() * (canvas.width - animations.meteor.frameWidth)),
-      y: -animations.meteor.image.height
+      y: -animations.meteor.image.height - Math.floor(Math.random() * 300),
+      speed: 0.3 + Math.random()
     });
   }
 
@@ -149,7 +150,7 @@ var render = function(time) {
   for (i = 0; i < meteors.length; i++) {
     var meteor = meteors[i];
     drawAnimation(context, "meteor", meteor.x, meteor.y);
-    meteor.y += 1 * elapsed;
+    meteor.y += meteor.speed * elapsed;
     if (meteor.y > canvas.height) {
       meteors.splice(i, 1);
       i--;
