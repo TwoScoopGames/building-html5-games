@@ -3,6 +3,7 @@ var context = canvas.getContext("2d");
 
 // Keyboard Input
 var keys = {
+  32: "space",
   37: "left",
   38: "up",
   39: "right",
@@ -19,6 +20,14 @@ window.addEventListener("keyup", function(e) {
 
 // Animations
 var animations = {
+  bullet: {
+    image: new Image(),
+    frame: 0,
+    frames: 5,
+    frameWidth: 55 / 5,
+    time: 0,
+    speed: 100
+  },
   ship: {
     image: new Image(),
     frame: 0,
@@ -28,6 +37,7 @@ var animations = {
     speed: 200
   }
 };
+animations.bullet.image.src = "images/bullet-f5.png";
 animations.ship.image.src = "images/ship-f3.png";
 
 function advanceAnimations(elapsed) {
@@ -51,10 +61,12 @@ function drawAnimation(context, name, x, y) {
 
 // Entities
 var player = {
-  x: 50,
-  y: 50,
+  x: 380,
+  y: 500,
   speed: .7
 };
+
+var bullets = [];
 
 var lastFrameTime = null;
 
@@ -79,9 +91,21 @@ var render = function(time) {
   if (pressed["down"]) {
     player.y += player.speed * elapsed;
   }
+  if (pressed["space"]) {
+    bullets.push({
+      x: player.x + (animations.ship.frameWidth / 2) - (animations.bullet.frameWidth / 2),
+      y: player.y - animations.bullet.image.height
+    });
+  }
 
   context.clearRect(0, 0, canvas.width, canvas.height);
   drawAnimation(context, "ship", player.x, player.y);
+
+  for (var i = 0; i < bullets.length; i++) {
+    var bullet = bullets[i];
+    drawAnimation(context, "bullet", bullet.x, bullet.y);
+    bullet.y -= 1 * elapsed;
+  }
 
   window.requestAnimationFrame(render);
 }
