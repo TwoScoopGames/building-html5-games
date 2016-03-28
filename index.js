@@ -28,6 +28,14 @@ var animations = {
     time: 0,
     speed: 100
   },
+  meteor: {
+    image: new Image(),
+    frame: 0,
+    frames: 4,
+    frameWidth: 320 / 4,
+    time: 0,
+    speed: 300
+  },
   ship: {
     image: new Image(),
     frame: 0,
@@ -38,6 +46,7 @@ var animations = {
   }
 };
 animations.bullet.image.src = "images/bullet-f5.png";
+animations.meteor.image.src = "images/meteor-f4.png";
 animations.ship.image.src = "images/ship-f3.png";
 
 function advanceAnimations(elapsed) {
@@ -67,6 +76,7 @@ var player = {
 };
 
 var bullets = [];
+var meteors = [{ x: 50, y: 50 }];
 
 var lastFrameTime = null;
 
@@ -105,6 +115,11 @@ var render = function(time) {
     var bullet = bullets[i];
     drawAnimation(context, "bullet", bullet.x, bullet.y);
     bullet.y -= 1 * elapsed;
+  }
+  for (i = 0; i < meteors.length; i++) {
+    var meteor = meteors[i];
+    drawAnimation(context, "meteor", meteor.x, meteor.y);
+    meteor.y += 1 * elapsed;
   }
 
   window.requestAnimationFrame(render);
