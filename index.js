@@ -19,21 +19,23 @@ window.addEventListener("keyup", function(e) {
   pressed[keys[e.keyCode]] = false;
 });
 
-var playerX = 50;
-var playerY = 50;
-var playerSpeed = 5;
+var player = {
+  x: 50,
+  y: 50,
+  speed: 5
+};
 var render = function(elapsed) {
   if (pressed["left"]) {
-    playerX -= playerSpeed;
+    player.x -= player.speed;
   }
   if (pressed["right"]) {
-    playerX += playerSpeed;
+    player.x += player.speed;
   }
   if (pressed["up"]) {
-    playerY -= playerSpeed;
+    player.y -= player.speed;
   }
   if (pressed["down"]) {
-    playerY += playerSpeed;
+    player.y += player.speed;
   }
 
   context.fillStyle = colors[color];
@@ -42,7 +44,7 @@ var render = function(elapsed) {
     color = 0;
   }
   context.clearRect(0, 0, canvas.width, canvas.height);
-  context.fillRect(playerX, playerY, 50, 50);
+  context.fillRect(player.x, player.y, 50, 50);
 
   window.requestAnimationFrame(render);
 }
