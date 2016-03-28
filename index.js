@@ -80,6 +80,11 @@ var meteors = [];
 
 var lastFrameTime = null;
 
+function overlaps(x1, y1, w1, h1, x2, y2, w2, h2) {
+  return x1 + w1 > x2 && x1 < x2 + w2 &&
+    y1 + h1 > y1 && y1 < y2 + h2;
+}
+
 var render = function(time) {
   if (lastFrameTime === null) {
     lastFrameTime = time;
@@ -122,6 +127,19 @@ var render = function(time) {
     var bullet = bullets[i];
     drawAnimation(context, "bullet", bullet.x, bullet.y);
     bullet.y -= 1 * elapsed;
+    if (bullet.y < -animations.bullet.height) {
+      bullets.splice(i, 1);
+      i--;
+      continue;
+    }
+    for (var j = 0; j < meteors.length; j++) {
+      var meteor = meteors[j];
+      if (overlaps(bullet.x, bullet.y, animations.bullet.frameWidth, animations.bullet.image.height, meteor.x, meteor.y, animations.meteor.frameWidth, animations.meteor.image.height)) {
+        bullets.splice(i, 1);
+        meteors.splice(j, 1);
+        j--;
+      }
+    }
   }
   for (i = 0; i < meteors.length; i++) {
     var meteor = meteors[i];
