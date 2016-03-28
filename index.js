@@ -70,7 +70,7 @@ function drawAnimation(context, name, x, y) {
 
 // Entities
 var player = {
-  x: 380,
+  x: (canvas.width / 2) - (animations.ship.frameWidth / 2),
   y: 500,
   speed: .7
 };
@@ -88,6 +88,13 @@ var render = function(time) {
   lastFrameTime = time;
 
   advanceAnimations(elapsed);
+
+  while (meteors.length < 1) {
+    meteors.push({
+      x: Math.floor(Math.random() * (canvas.width - animations.meteor.frameWidth)),
+      y: -animations.meteor.image.height
+    });
+  }
 
   if (pressed["left"]) {
     player.x -= player.speed * elapsed;
@@ -120,6 +127,10 @@ var render = function(time) {
     var meteor = meteors[i];
     drawAnimation(context, "meteor", meteor.x, meteor.y);
     meteor.y += 1 * elapsed;
+    if (meteor.y > canvas.height) {
+      meteors.splice(i, 1);
+      i--;
+    }
   }
 
   window.requestAnimationFrame(render);
